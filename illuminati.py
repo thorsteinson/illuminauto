@@ -2,7 +2,6 @@ import numpy as np
 from sklearn.cluster import MeanShift, estimate_bandwidth
 from skimage.data import load
 from skimage.measure import block_reduce
-from skimage.transform import resize, rescale
 from skimage.color import rgb2gray
 from colorsys import rgb_to_hls
 
