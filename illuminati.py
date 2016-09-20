@@ -11,10 +11,7 @@ import time # For performance measurment
 import os
 from os.path import join # For file access
 
-TEST_IMAGE_PATH = join(os.getcwd(), "test_image.jpg")
 BLOCK_SIZE = 32
-
-lizard = load(TEST_IMAGE_PATH)
 
 # Takes a screenshot of the current screen
 # (Not sure how multiple desktops work...)
