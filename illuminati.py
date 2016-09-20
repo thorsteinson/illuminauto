@@ -12,6 +12,7 @@ import os
 from os.path import join # For file access
 
 BLOCK_SIZE = 32
+FREQUENCY = 1 # Seconds between runs
 
 # Takes a screenshot of the current screen
 # (Not sure how multiple desktops work...)
@@ -58,8 +59,17 @@ def rgb_vec_to_hls(v):
     t = rgb_to_hls(r, g, b)
     return (t[0] * 255, t[1] * 255, t[2] * 255)
 
-start = time.process_time()
-color_extract(take_screenshot())
-end = time.process_time()
+def run_forever(freq):
+    while True:
+        start = time.perf_counter()
+        try:
+            color_extract(take_screenshot())
+        except OSError as err:
+            print("Couldn't caputure the screen, continuing...")
+        end = time.perf_counter()
 
-print("Total time: ", end - start)
+        # Sleep until the end of the next second
+        total_time = end-start
+        time.sleep(max(0, freq - total_time))
+
+run_forever(FREQUENCY)
