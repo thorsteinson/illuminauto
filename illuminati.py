@@ -6,6 +6,8 @@ from skimage.transform import resize, rescale
 from skimage.color import rgb2gray
 from colorsys import rgb_to_hls
 
+from PIL import ImageGrab
+
 import time # For performance measurment
 import os
 from os.path import join # For file access
@@ -14,6 +16,10 @@ TEST_IMAGE_PATH = join(os.getcwd(), "test_image.jpg")
 BLOCK_SIZE = 32
 
 lizard = load(TEST_IMAGE_PATH)
+
+# Takes a screenshot of the current screen
+# (Not sure how multiple desktops work...)
+def take_screenshot(): return np.array(ImageGrab.grab())
 
 # Takes an image as a numpy array, and returns the color of the primary cluster
 def color_extract(img):
@@ -57,7 +63,7 @@ def rgb_vec_to_hls(v):
     return (t[0] * 255, t[1] * 255, t[2] * 255)
 
 start = time.process_time()
-color_extract(lizard)
+color_extract(take_screenshot())
 end = time.process_time()
 
-print("Total time: %s", end - start)
+print("Total time: ", end - start)
