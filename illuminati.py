@@ -45,11 +45,10 @@ def color_extract(img):
     luminance = np.average(gray)
 
     # Return the hue and luminance
-    print("Colors: ")
-    print(model.cluster_centers_)
-    print(colors)
-    print("Luminance")
-    print(luminance)
+    return {
+        'colors': colors,
+        'luminance': luminance
+    }
 
 # Converts RGB vector into an HLS tuple (scaled to 255)
 def rgb_vec_to_hls(v):
@@ -63,7 +62,8 @@ def run_forever(freq):
     while True:
         start = time.perf_counter()
         try:
-            color_extract(take_screenshot())
+            colors = color_extract(take_screenshot())
+            print(colors)
         except OSError as err:
             print("Couldn't caputure the screen, continuing...")
         end = time.perf_counter()
