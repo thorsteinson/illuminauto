@@ -13,6 +13,9 @@ from os.path import join # For file access
 
 BLOCK_SIZE = 32
 FREQUENCY = 1 # Seconds between runs
+PHILLIPS_HUE_MAX_BRIGHTNESS = 254
+PHILLIPS_HUE_MAX_HUE = 65535
+PHILLIPS_HUE_MAX_SAT = 65535
 
 # Takes a screenshot of the current screen
 # (Not sure how multiple desktops work...)
@@ -47,16 +50,18 @@ def color_extract(img):
     # Return the hue and luminance
     return {
         'colors': colors,
-        'luminance': luminance
+        'brightness': round(luminance * PHILLIPS_HUE_MAX_BRIGHTNESS)
     }
 
-# Converts RGB vector into an HLS tuple (scaled to 255)
+# Converts RGB vector into colors that are scaled appropriately for the Phillips Hue
 def rgb_vec_to_hls(v):
     r = v[0]
     g = v[1]
     b = v[2]
     t = rgb_to_hls(r, g, b)
-    return (t[0] * 255, t[1] * 255, t[2] * 255)
+    return {'hue': round(t[0] * PHILLIPS_HUE_MAX_HUE),
+            'brightness': round(t[1] * PHILLIPS_HUE_MAX_BRIGHTNESS),
+            'sat': round(t[2] * PHILLIPS_HUE_MAX_SAT)}
 
 def run_forever(freq):
     while True:
