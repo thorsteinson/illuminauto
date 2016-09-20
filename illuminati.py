@@ -16,6 +16,7 @@ FREQUENCY = 1 # Seconds between runs
 PHILLIPS_HUE_MAX_BRIGHTNESS = 254
 PHILLIPS_HUE_MAX_HUE = 65535
 PHILLIPS_HUE_MAX_SAT = 65535
+PHILLIPS_HUE_TRANSITION_TIME = 1 # Spend 100ms transitioning from one lightstate to the next
 
 # Takes a screenshot of the current screen
 # (Not sure how multiple desktops work...)
@@ -42,7 +43,9 @@ def color_extract(img):
     ## Note, we should do a check on the L param to see whether the color is close or not to white / black.
     ## We can set a cutoff point of 20% either way, and that will make the primary for lights either "bright" or "dim"
     colors = [rgb_vec_to_hls(c) for c in colors]
-
+    for c in colors:
+        amplify(c)
+        
     # Get the luminance
     gray = rgb2gray(mini_img)
     luminance = np.average(gray)
@@ -50,18 +53,18 @@ def color_extract(img):
     # Return the hue and luminance
     return {
         'colors': colors,
-        'brightness': round(luminance * PHILLIPS_HUE_MAX_BRIGHTNESS)
+        'brightness': luminance
     }
 
-# Converts RGB vector into colors that are scaled appropriately for the Phillips Hue
+# Converts RGB vector into easier to manipulate HLS color map
 def rgb_vec_to_hls(v):
     r = v[0]
     g = v[1]
     b = v[2]
     t = rgb_to_hls(r, g, b)
-    return {'hue': round(t[0] * PHILLIPS_HUE_MAX_HUE),
-            'brightness': round(t[1] * PHILLIPS_HUE_MAX_BRIGHTNESS),
-            'sat': round(t[2] * PHILLIPS_HUE_MAX_SAT)}
+    return {'hue': t[0],
+            'lightness': t[1],
+            'sat': t[2]}
 
 def run_forever(freq):
     while True:
@@ -73,8 +76,19 @@ def run_forever(freq):
             print("Couldn't caputure the screen, continuing...")
         end = time.perf_counter()
 
-        # Sleep until the end of the next second
+        # Sleep until the end of the next period
         total_time = end-start
         time.sleep(max(0, freq - total_time))
+
+# Amplifies a color so that it's saturation is amplified or cut off (becomes white)
+# Takes a color represented as a map
+def amplify(color):
+    lightness = color['lightness']
+    if lightness > 0.85:
+        # Just make the light totally white
+        color['sat'] = 0
+    else:
+        # Amplify the saturation to make it pop
+        color['sat'] = min(1, color['sat'] + 0.2)
 
 run_forever(FREQUENCY)
