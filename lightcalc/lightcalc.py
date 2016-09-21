@@ -11,6 +11,9 @@ class LightCalc:
     """A class that takes an image and extracts the main colors out of it"""
 
     def __init__(self, img, **keywords):
+        if type(img) is not np.ndarray:
+            raise TypeError('Image provided is not a numpy array. Found ' + type(img))
+
         img_dimension_size = len(img.shape)
         if img_dimension_size != 3:
             raise TypeError('Image dimension expected to be 3, found: ' + img_dimension_size)
