@@ -5,9 +5,10 @@ from skimage.measure import block_reduce
 from skimage.color import rgb2gray
 from colorsys import rgb_to_hls
 
+DEFAULT_BLOCK_SIZE = 32
+
 class LightCalc:
     """A class that takes an image and extracts the main colors out of it"""
-    _DEFAULT_BLOCK_SIZE = 32
 
     def __init__(self, img, **keywords):
         img_dimension_size = len(img.shape)
@@ -16,14 +17,14 @@ class LightCalc:
 
         img_pixel_size = img.shape[2]
         if img_pixel_size != 3:
-            raise TypeError('Dimension for pixels expected to be 3, found: ' img_pixel_size)
+            raise TypeError('Dimension for pixels expected to be 3, found: ' + img_pixel_size)
 
-        blocksize = keywords.get('blocksize') if 'blocksize' in keywords else _DEFAULT_BLOCK_SIZE
+        blocksize = keywords.get('blocksize') if 'blocksize' in keywords else DEFAULT_BLOCK_SIZE
 
         mini_img = reduce_image(img, blocksize)
 
         self.colors = calc_colors(mini_img)
-        self.brightness = luminance(mini_img)
+        self.brightness = calc_brightness(mini_img)
 
 # Takes an image as a numpy array, and returns the color of the primary cluster
 # Resize the image
@@ -49,7 +50,7 @@ def calc_colors(img):
 
 # Returns the overall luminance of an image
 def calc_brightness(img):
-    gray = rgb2gray(mini_img)
+    gray = rgb2gray(img)
     return np.average(gray)
 
 # Converts RGB vector into easier to manipulate HLS color map

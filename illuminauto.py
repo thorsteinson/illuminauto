@@ -7,6 +7,7 @@ from PIL import ImageGrab
 import time # For performance measurment
 import os
 from os.path import join # For file access
+from urllib.parse import urljoin
 
 PERIOD = 2 # Seconds between runs
 PHILLIPS_HUE_MAX_BRIGHTNESS = 254
@@ -27,7 +28,7 @@ def run_forever(freq):
         start = time.perf_counter()
         try:
             calc = LightCalc(take_screenshot())
-            print(light_calc)
+            print(calc)
             change_lights(calc.colors, calc.brightness)
         except OSError as err:
             print("Couldn't caputure the screen, continuing...")
