@@ -1,4 +1,4 @@
-from lightcalc import LightCalc
+from lightcalc.core import LightCalc
 import numpy as np
 import posixpath
 import requests
