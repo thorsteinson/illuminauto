@@ -51,9 +51,8 @@ class LightGroup:
 # Takes a color and brightness then returns a map that will act the request body to phillips hue
 def construct_hue_body(color, brightness, transition_time):
     return {
-        "on": True,
         "transitiontime": transition_time,
-        "hue": int(color["hue"] *MAX_HUE),
+        "hue": int(color["hue"] * MAX_HUE),
         "bri": int(brightness * MAX_BRIGHTNESS),
-        "sat": int(color["sat"] *MAX_SAT)
+        "sat": int(color["sat"] * MAX_SAT)
     }
