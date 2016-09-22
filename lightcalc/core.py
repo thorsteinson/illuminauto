@@ -6,6 +6,8 @@ from skimage.color import rgb2gray
 from colorsys import rgb_to_hls
 
 DEFAULT_BLOCK_SIZE = 32
+QUANTILE_SIZE = 0.2
+BANDWIDTH_SAMPLES = 500
 
 class LightCalc:
     """A class that takes an image and extracts the main colors out of it"""
@@ -40,7 +42,7 @@ def reduce_image(img, blocksize):
 def calc_colors(img):
     ## Reshapes the array so that it's a single array of pixels
     img_points = img.reshape(img.shape[0] * img.shape[1], 3)
-    bandwidth = estimate_bandwidth(img_points, quantile=0.2, n_samples=500)
+    bandwidth = estimate_bandwidth(img_points, quantile=QUANTILE_SIZE, n_samples=BANDWIDTH_SAMPLES)
     model = MeanShift(bandwidth=bandwidth, bin_seeding=True)
     model.fit(img_points)
 
