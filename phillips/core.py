@@ -46,7 +46,7 @@ class LightGroup:
         body = construct_hue_body(color, brightness, transition_time)
         payload = json.dumps(body)
         for url in self.light_urls:
-            requests.put(url, data=payload)
+            requests.put(url, data=payload, timeout=0.5)
     
 # Takes a color and brightness then returns a map that will act the request body to phillips hue
 def construct_hue_body(color, brightness, transition_time):
