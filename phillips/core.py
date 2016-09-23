@@ -25,7 +25,7 @@ class Phillips:
     # Constructs the address for a hue light
     def _construct_hue_url(self, light_id):
         return urljoin("http://" + self.bridge_ip,
-                        posixpath.join("api", self.username, "lights", light_id, "action"))
+                        posixpath.join("api", self.username, "lights", str(light_id), "state"))
     
     def get_secondary(self):
         urls = [self._construct_hue_url(id) for id in SECONDARY_LIGHT_GROUP]
@@ -39,7 +39,7 @@ class LightGroup:
     def __init__(self, light_urls):
         # The urls for each light in the group. We avoid the groups API because it's more performant
         # to directly access the lights themselves unless a group has at least a dozen lights
-        self.light_urls
+        self.light_urls = light_urls
     
     # Makes a request to change the color
     def change_color(self, color, brightness, transition_time):
