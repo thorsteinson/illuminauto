@@ -4,8 +4,8 @@ import numpy as np
 from PIL import ImageGrab
 import time # For performance measurment
 
-PERIOD = 2 # Seconds between runs
-TRANSITION_TIME = 10 # Time for the light to change
+PERIOD = 1 # Seconds between runs
+TRANSITION_TIME = 0 # Time for the light to change
 
 # Takes a screenshot of the current screen
 # (Not sure how multiple desktops work...)
