@@ -49,4 +49,5 @@ def get_colors(colors):
     
     return (primary_color, secondary_color)
 
-run_forever(PERIOD)
+if __name__ == "__main__":
+    run_forever(PERIOD)
