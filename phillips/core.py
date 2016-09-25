@@ -29,12 +29,12 @@ class Phillips:
         return urljoin("http://" + self.bridge_ip,
                         posixpath.join("api", self.username, "lights", str(light_id), "state"))
     
-    def get_secondary(self):
-        urls = [self._construct_hue_url(id) for id in SECONDARY_LIGHT_GROUP]
+    def _get_group(self, light_ids):
+        urls = [self._construct_hue_url(id) for id in light_ids]
         return LightGroup(urls)
-    def get_primary(self):
-        urls = [self._construct_hue_url(id) for id in PRIMARY_LIGHT_GROUP]
-        return LightGroup(urls)
+    
+    def get_secondary(self): return self._get_group(SECONDARY_LIGHT_GROUP)
+    def get_primary(self): return self._get_group(PRIMARY_LIGHT_GROUP)
 
 class LightGroup:
     """A group of phillips lights that can have it's color altered"""
