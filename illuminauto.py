@@ -5,7 +5,7 @@ from PIL import ImageGrab
 import time # For performance measurment
 
 PERIOD = 0.8 # Seconds between runs
-TRANSITION_TIME = 1 # Time for the light to change
+TRANSITION_TIME = 3 # Time for the light to change
 
 # Takes a screenshot of the current screen
 # (Not sure how multiple desktops work...)
@@ -15,7 +15,9 @@ def run_forever(freq):
     # Grab the lights
     phillips = Phillips()
     primary_light = phillips.get_primary()
+    primary_light.turn_on()
     secondary_light = phillips.get_secondary()
+    secondary_light.turn_on()
 
     while True:
         start = time.perf_counter()

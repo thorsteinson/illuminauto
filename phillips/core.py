@@ -16,6 +16,8 @@ USERNAME = "k-w0WCT6dJUfVudh506zzB-ejM2MPDoj0bntOPeB"
 PRIMARY_LIGHT_GROUP = [2, 3]
 SECONDARY_LIGHT_GROUP = [1]
 
+TIMEOUT_LENGTH = 0.5
+
 class Phillips:
     """A class for accessing light groups, and establishing a connection to the Phillips Hue Bridge"""
     def __init__(self):
@@ -46,7 +48,13 @@ class LightGroup:
         body = construct_hue_body(color, brightness, transition_time)
         payload = json.dumps(body)
         for url in self.light_urls:
-            requests.put(url, data=payload, timeout=0.5)
+            requests.put(url, data=payload, timeout=TIMEOUT_LENGTH)
+        
+    # Makes a request to turn the light on
+    def turn_on(self):
+        payload = json.dumps({"on": True})
+        for url in self.light_urls:
+            requests.put(url, data=payload, timeout=TIMEOUT_LENGTH)
     
 # Takes a color and brightness then returns a map that will act the request body to phillips hue
 def construct_hue_body(color, brightness, transition_time):
